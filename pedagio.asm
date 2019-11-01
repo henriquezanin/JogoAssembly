@@ -1,14 +1,56 @@
 ;Jogo pegadio de bixos
 
+Letra: var #1
+Pontos: var #1
 
 main:
 	call ApagaTela
 	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
 	loadn R2, #1536  			; cor branca!
 	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+	
+	jmp Loop_Inicio
+		
+	Loop_Inicio:
+		call DigLetra 		; Le uma letra
+		
+		loadn r0, #' '		; Espera que a tecla 'space' seja digitada para iniciar o jogo
+		load r1, Letra
+		cmp r0, r1
+		jne Loop_Inicio
+		
+	set_pontos:
+	
+		push r0
+		loadn r0, #0
+		store Pontos, r0
+		pop r0
+	
+	
+exit_game:
+	call ApagaTela
 	halt
 	
-	
+;********************************************************
+;                  	     DigLetra
+;********************************************************
+
+DigLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra"
+	push r0
+	push r1
+	loadn r1, #255	; Se nao digitar nada vem 255
+
+   DigLetra_Loop:
+		inchar r0			; Le o teclado, se nada for digitado = 255
+		cmp r0, r1			;compara r0 com 255
+		jeq DigLetra_Loop	; Fica lendo ate' que digite uma tecla valida
+
+	store Letra, r0			; Salva a tecla na variavel global "Letra"
+
+	pop r1
+	pop r0
+	rts
+
 	
 ;********************************************************
 ;                       IMPRIME TELA2
@@ -147,29 +189,29 @@ tela0Linha29 : string "                                        "
 ; Declara e preenche tela linha por linha (40 caracteres):
 tela1Linha0  : string "                                        "
 tela1Linha1  : string "                                        "
-tela1Linha2  : string "                                        "
-tela1Linha3  : string "                                        "
-tela1Linha4  : string "                                        "
-tela1Linha5  : string "                                        "
-tela1Linha6  : string "                                        "
-tela1Linha7  : string "                                        "
-tela1Linha8  : string "                        @@@@            "
-tela1Linha9  : string "                      @@@@@@@@@@        "
-tela1Linha10 : string "                       @@@@@@@@@@@@     "
-tela1Linha11 : string "                         @@@            "
-tela1Linha12 : string "                                        "
-tela1Linha13 : string "                                        "
-tela1Linha14 : string "                                        "
-tela1Linha15 : string "                                        "
-tela1Linha16 : string "                                        "
-tela1Linha17 : string "                                        "
-tela1Linha18 : string "                                        "
-tela1Linha19 : string "                                        "
-tela1Linha20 : string "                                        "
-tela1Linha21 : string "                                        "
+tela1Linha2  : string "  _____         _             _         "
+tela1Linha3  : string " |  __ \\       | |           (_)        "
+tela1Linha4  : string " | |__) |__  __| | __ _  __ _ _  ___    "
+tela1Linha5  : string " |  ___/ _ \\/ _` |/ _` |/ _` | |/ _ \\   "
+tela1Linha6  : string " | |  |  __/ (_| | (_| | (_| | | (_) |  "
+tela1Linha7  : string " |_|   \\___|\\__,_|\\__,_|\\__, |_|\\___/   "
+tela1Linha8  : string "                         __/ |          "
+tela1Linha9  : string "                        |___/           "
+tela1Linha10 : string "                   _                    "
+tela1Linha11 : string "                  | |                   "
+tela1Linha12 : string "                __| | ___               "
+tela1Linha13 : string "               / _` |/ _ \\              "
+tela1Linha14 : string "              | (_| | (_) |             "
+tela1Linha15 : string "               \\__,_|\\___/              "
+tela1Linha16 : string "        ____  _                         "
+tela1Linha17 : string "       |  _ \\(_)                        "
+tela1Linha18 : string "       | |_) |___  ____ _  ___          "
+tela1Linha19 : string "       |  _ <| \\ \\/ / _` |/ _ \\         "
+tela1Linha20 : string "       | |_) | |>  < (_| | (_) |        "
+tela1Linha21 : string "       |____/|_/_/\\_\\__,_|\\___/         "
 tela1Linha22 : string "                                        "
 tela1Linha23 : string "                                        "
-tela1Linha24 : string "                                        "
+tela1Linha24 : string "      Aperte espaco para iniciar        "
 tela1Linha25 : string "                                        "
 tela1Linha26 : string "                                        "
 tela1Linha27 : string "                                        "

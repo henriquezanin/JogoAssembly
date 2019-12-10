@@ -2,11 +2,22 @@
 
 Letra: var #1
 Pontos: var #1
+nVidasBixo: var #1		; Contem a quantidade de vidas restantes do bixo
+nPontos: var #1				; Contem a quantidade de pontos
+posBixo: var #1
+
+init:
+	Loadn R1, #3
+	store nVidasBixo, R1
+
+	Loadn R0, #0			; Contador para os Mods	= 0
+	store nPontos, R0
+
 
 main:
 	call ApagaTela
 	loadn R1, #tela1Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn R2, #1536  			; cor branca!
+	loadn R2, #2816  			; cor branca!
 	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
 	
 	jmp Loop_Inicio
@@ -19,16 +30,36 @@ main:
 		cmp r0, r1
 		jne Loop_Inicio
 		
-	set_pontos:
-	
-		push r0
-		loadn r0, #0
-		store Pontos, r0
-		pop r0
-	
+	Cenario:
+		call ApagaTela
+		loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn R2, #1536  			; cor branca!
+		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+    
+		loadn R1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn R2, #2816  			; cor branca!
+		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+    
+		loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn R2, #0   			; cor branca!
+		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+		
+		call ImprimeUI
+		
+		loadn r0, #900
+		store posBixo, r0
+		
+	MoveLoop:
+		call MoveBixo
+		call Delay
+		call MoveBixo_Desenha
+		;call MoveBixo_Apaga
+		jmp MoveLoop
+		breakp
+		
 	
 exit_game:
-	call ApagaTela
+	
 	halt
 	
 ;********************************************************
@@ -51,6 +82,154 @@ DigLetra:	; Espera que uma tecla seja digitada e salva na variavel global "Letra
 	pop r0
 	rts
 
+;********************************************************
+;                    IMPRIME USER INTERFACE
+;********************************************************
+ImprimeUI:
+	push r0	; protege o r3 na pilha para ser usado na subrotina
+	push r1	; protege o r1 na pilha para preservar seu valor
+	push r2	; protege o r1 na pilha para preservar seu valor
+	
+	load R0, nVidasBixo
+	load R2, nPontos
+	loadn R1, #48
+	add R0, R0, R1
+	add R2, R2, R1
+	loadn R1, #47
+	outchar R0, R1 ; imprime o numero de vidas
+	loadn R1, #75
+	outchar R2, R1 ; imprime a fase
+	
+	pop r2
+	pop r1
+	pop r0
+	rts
+	
+;********************************************************
+;                    MOVE BIXO
+;********************************************************
+MoveBixo:
+	push r0	; protege o r3 na pilha para ser usado na subrotina
+	push r1	; protege o r1 na pilha para preservar seu valor
+	push r2	; protege o r1 na pilha para preservar seu valor
+	
+	load r0, posBixo
+	
+	call DigLetra
+	load r1, Letra
+	
+	loadn r2, #'a'
+	cmp r1, r2
+	jeq MoveBixo_A
+	
+	loadn r2, #'d'
+	cmp r1, r2
+	jeq MoveBixo_D
+		
+	loadn r2, #'w'
+	cmp r1, r2
+	jeq MoveBixo_W
+		
+	loadn r2, #'s'
+	cmp r1, r2
+	jeq MoveBixo_S
+	
+	
+	MoveBixo_A:
+		loadn r1, #40
+		loadn r2, #0
+		mod r1, r0, r1
+		cmp r1, r2
+		jeq MoveBixo_Fim
+		call MoveBixo_Apaga
+		dec R0
+		jmp MoveBixo_Fim
+		
+	
+	MoveBixo_D:
+		loadn r1, #40
+		loadn r2, #39
+		mod r1, r0, r1
+		cmp r1, r2
+		jeq MoveBixo_Fim
+		call MoveBixo_Apaga
+		inc R0
+		jmp MoveBixo_Fim
+	
+	MoveBixo_W:
+		loadn r1, #640
+		loadn r2, #40
+		cmp r0, r1
+		jle MoveBixo_Fim
+		call MoveBixo_Apaga
+		sub r0, r0, r2
+		jmp MoveBixo_Fim
+		
+	MoveBixo_S:
+		loadn r1, #920
+		cmp r0, r1
+		jgr MoveBixo_Fim
+		call MoveBixo_Apaga
+		loadn r2, #40
+		add r0, r0, r2
+		jmp MoveBixo_Fim
+		
+	MoveBixo_Desenha:
+		push r0
+		push r1
+		
+		loadn R1, #'X'	; Bixo
+		load R0, posBixo
+		outchar R1, R0
+	
+		pop R1
+		pop R0
+		rts
+	
+	MoveBixo_Apaga:
+		push r0
+		push r1
+		
+		loadn R1, #' '
+		load R0, posBixo
+		outchar r1, r0
+		
+		pop R1
+		pop R0
+		rts
+		
+	MoveBixo_Fim:
+		store posBixo, r0
+		pop r2
+		pop r1
+		pop r0
+		rts
+		
+;********************************************************
+;                       DELAY
+;********************************************************		
+
+
+Delay:
+						;Utiliza Push e Pop para nao afetar os Ristradores do programa principal
+	Push R0
+	Push R1
+	
+	Loadn R1, #10  ; a
+   Delay_volta2:				;Quebrou o contador acima em duas partes (dois loops de decremento)
+	Loadn R0, #5000	; b
+   Delay_volta: 
+	Dec R0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
+	JNZ Delay_volta	
+	Dec R1
+	JNZ Delay_volta2
+	
+	Pop R1
+	Pop R0
+	
+	RTS							;return
+
+;-------------------------------
 	
 ;********************************************************
 ;                       IMPRIME TELA2
@@ -217,3 +396,98 @@ tela1Linha26 : string "                                        "
 tela1Linha27 : string "                                        "
 tela1Linha28 : string "                                        "
 tela1Linha29 : string "                                        "
+
+; Declara e preenche tela linha por linha (40 caracteres):
+tela2Linha0  : string "                                        "
+tela2Linha1  : string "          PEDAGIO DO BIXAO              "
+tela2Linha2  : string "                                        "
+tela2Linha3  : string "                                        "
+tela2Linha4  : string "                                        "
+tela2Linha5  : string "                                        "
+tela2Linha6  : string "                                        "
+tela2Linha7  : string "                                        "
+tela2Linha8  : string "                                        "
+tela2Linha9  : string "                                        "
+tela2Linha10 : string "                                        "
+tela2Linha11 : string "                                        "
+tela2Linha12 : string "                                        "
+tela2Linha13 : string "                                        "
+tela2Linha14 : string "                                        "
+tela2Linha15 : string "                                        "
+tela2Linha16 : string "                                        "
+tela2Linha17 : string "                                        "
+tela2Linha18 : string "                                        "
+tela2Linha19 : string "                                        "
+tela2Linha20 : string "                                        "
+tela2Linha21 : string "                                        "
+tela2Linha22 : string "                                        "
+tela2Linha23 : string "                                        "
+tela2Linha24 : string "                                        "
+tela2Linha25 : string "                                        "
+tela2Linha26 : string "                                        "
+tela2Linha27 : string "                                        "
+tela2Linha28 : string "                                        "
+tela2Linha29 : string "                                        "
+
+tela3Linha0  : string "========================================"
+tela3Linha1  : string "|VIDA:  |                  |PONTOS:    |"
+tela3Linha2  : string "========================================"
+tela3Linha3  : string "                                        "
+tela3Linha4  : string "                                        "
+tela3Linha5  : string "                                        "
+tela3Linha6  : string "                                        "
+tela3Linha7  : string "                                        "
+tela3Linha8  : string "                                        "
+tela3Linha9  : string "                                        "
+tela3Linha10 : string "                                        "
+tela3Linha11 : string "                                        "
+tela3Linha12 : string "                                        "
+tela3Linha13 : string "                                        "
+tela3Linha14 : string "                                        "
+tela3Linha15 : string "                                        "
+tela3Linha16 : string "                                        "
+tela3Linha17 : string "                                        "
+tela3Linha18 : string "                                        "
+tela3Linha19 : string "                                        "
+tela3Linha20 : string "                                        "
+tela3Linha21 : string "                                        "
+tela3Linha22 : string "                                        "
+tela3Linha23 : string "                                        "
+tela3Linha24 : string "                                        "
+tela3Linha25 : string "                                        "
+tela3Linha26 : string "                                        "
+tela3Linha27 : string "                                        "
+tela3Linha28 : string "                                        "
+tela3Linha29 : string "                                        "
+
+; Declara e preenche tela linha por linha (40 caracteres):
+tela4Linha0  : string "                                        "
+tela4Linha1  : string "                                        "
+tela4Linha2  : string "                                        "
+tela4Linha3  : string "|                                      |"
+tela4Linha4  : string "|                                      |"
+tela4Linha5  : string "|======================================|"
+tela4Linha6  : string "                                        "
+tela4Linha7  : string "                                        "
+tela4Linha8  : string "                                        "
+tela4Linha9  : string "                                        "
+tela4Linha10 : string "                                        "
+tela4Linha11 : string "                                        "
+tela4Linha12 : string "                                        "
+tela4Linha13 : string "                                        "
+tela4Linha14 : string "----------------------------------------"
+tela4Linha15 : string "                                        "
+tela4Linha16 : string "                                        "
+tela4Linha17 : string "                                        "
+tela4Linha18 : string "                                        "
+tela4Linha19 : string "                                        "
+tela4Linha20 : string "                                        "
+tela4Linha21 : string "                                        "
+tela4Linha22 : string "                                        "
+tela4Linha23 : string "                                        "
+tela4Linha24 : string "========================================"
+tela4Linha25 : string "|                                      |"
+tela4Linha26 : string "|                                      |"
+tela4Linha27 : string "|                                      |"
+tela4Linha28 : string "|                                      |"
+tela4Linha29 : string "|                                      |"

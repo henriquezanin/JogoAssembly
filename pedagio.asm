@@ -248,13 +248,8 @@ MoveBixo:
 	cmp r1, r2
 	jeq MoveBixo_S
 	
-	MoveBixo_Fim:
-		pop r2
-		pop r1
-		pop r0
-		rts
 	
-	MoveBixo_A: 
+	MoveBixo_A:
 		loadn r1, #40
 		loadn r2, #0
 		mod r1, r0, r1
@@ -262,8 +257,6 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		dec R0
-		store posBixo, r0
-		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	
@@ -275,8 +268,6 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		inc R0
-		store posBixo, r0
-		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 	
 	MoveBixo_W:
@@ -286,26 +277,22 @@ MoveBixo:
 		jle MoveBixo_Fim
 		call MoveBixo_Apaga
 		sub r0, r0, r2
-		store posBixo, r0
-		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_S:
-		loadn r1, #919
+		loadn r1, #920
 		cmp r0, r1
 		jgr MoveBixo_Fim
 		call MoveBixo_Apaga
 		loadn r2, #40
 		add r0, r0, r2
-		store posBixo, r0
-		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_Desenha:
 		push r0
 		push r1
 		
-		loadn R1, #'%'	; Bixo
+		loadn R1, #'X'	; Bixo
 		load R0, posBixo
 		outchar R1, R0
 	
@@ -324,217 +311,14 @@ MoveBixo:
 		pop R1
 		pop R0
 		rts
-
-
-;********************************************************
-;                MOVE CARRO PRA DIREITA
-;********************************************************		
-MoveCarroDireita:
-	push r0
-	push r1
-	push r2
-	
-	load r0, posCarro ;pos na tela
-	loadn r1, #360 ;pos final na tela
-	loadn r2, #' '
-	
-	outchar r2, r0
-	inc r0
-	store posCarro, r0
-	cmp r0, r1
-	jle MoveCarroDireita_Desenha
-	jmp MoveCarroDireita_Volta
-	
-	MoveCarroDireita_Fim:
+		
+	MoveBixo_Fim:
+		store posBixo, r0
 		pop r2
 		pop r1
 		pop r0
 		rts
-
-	MoveCarroDireita_Desenha:
-		push r0
-		push r1
-		push r2
-
-		load r0, posCarro ;cor
-		loadn r1, #1024
-		loadn r2, #'#'
 		
-		add r2, r1, r2
-		
-		outchar r2, r0
-		pop r2
-		pop r1
-		pop r0
-		jmp MoveCarroDireita_Fim
-		
-		
-		
-	MoveCarroDireita_Volta:
-		push r0
-		
-		loadn r0, #319
-		store posCarro, r0
-		
-		pop r0
-		jmp MoveCarroDireita_Fim
-
-
-DropaMoeda:
-	push r0
-	push r1
-	push r2
-	push r3
-	
-	loadn r0, #0
-	load r1, flagMoeda
-	cmp r0, r1
-	ceq DropaMoeda_NovoTiro
-	
-	load r0, posMoeda
-	loadn r2, #' '
-	outchar r2, r0
-	
-	loadn r1, #40
-	loadn r2, #14 ;Linha do tracejado
-	div r3, r0, r1
-	cmp r3, r2
-	ceq DropaMoeda_ReplaceChar
-	
-	add r0, r1, r0
-	store posMoeda, r0
-	
-	load r2, posBixo
-	cmp r0, r2
-	jeq ContadorPontos
-	
-	loadn r1, #959
-	cmp r0, r1
-	jel DropaMoeda_DesenhaMoeda
-	loadn r1, #0
-	store flagMoeda, r1
-	
-	loadn r1, #919
-	cmp r0, r0
-	jeg ContadorVidas
-	
-	
-	DropaMoeda_Fim:
-		pop r3
-		pop r2
-		pop r1
-		pop r0
-		rts
-	
-	DropaMoeda_NovoTiro:
-		push r0
-		push r1
-		
-		load r0, posCarro
-		loadn r1, #40
-		add r0, r1, r0
-		
-		store posMoeda, r0
-		
-		loadn r1, #1
-		store flagMoeda, r1
-		
-		pop r1
-		pop r0
-		rts
-	
-	DropaMoeda_DesenhaMoeda:
-		push r0
-		push r1
-		push r2
-		
-		load r0, posMoeda
-		loadn r1, #'&'
-		loadn r2, #2816
-		add r1, r2, r1 ;para imprimir amarelo
-		
-		outchar r1, r0
-		
-		pop r2
-		pop r1
-		pop r0
-		jmp DropaMoeda_Fim
-		
-	DropaMoeda_ReplaceChar:
-		push r0
-		push r1
-		
-		load r0, posMoeda
-		loadn r1, #'-'
-		outchar r1, r0
-
-		pop r1
-		pop r0
-		rts
-			
-ContadorPontos:
-	push r0
-	push r1
-	
-	load r0, nPontos
-	inc r0
-	store nPontos, r0
-	call ImprimeUI
-	
-	loadn r1, #0
-	store flagMoeda, r1
-	
-	pop r1
-	pop r0
-	jmp DropaMoeda_Fim
-	
-ContadorVidas:
-	push r0
-	push r1
-	
-	load r0, nVidasBixo
-	dec r0
-	store nVidasBixo, r0
-	call ImprimeUI
-	
-	loadn r1, #0
-	store flagMoeda, r1
-	
-	pop r1
-	pop r0
-	jmp DropaMoeda_Fim
-
-FimDeJogo:
-	push r0
-	push r1
-	
-	load r0, nVidasBixo
-	loadn r1, #0
-	ceq ImprimeFimDeJogo
-	
-	halt
-	
-ImprimeFimDeJogo:
-	call ApagaTela
-
-    loadn r1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #2816  			; cor branca!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-    
-    loadn r1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #1536  			; cor branca!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-	
-	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #0   			; cor branca!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-	
-	loadn r1, #tela5Linha0	; Endereco onde comeca a primeira linha do cenario!!
-	loadn r2, #2304   			; cor vermelha!
-	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
-		
-	call ImprimeUI
-
 ;********************************************************
 ;                       DELAY
 ;********************************************************		
@@ -545,7 +329,7 @@ Delay:
 	Push R0
 	Push R1
 	
-	Loadn R1, #12; a
+	Loadn R1, #10  ; a
    Delay_volta2:				;Quebrou o contador acima em duas partes (dois loops de decremento)
 	Loadn R0, #5000	; b
    Delay_volta: 
@@ -821,34 +605,3 @@ tela4Linha26 : string "|                                      |"
 tela4Linha27 : string "|                                      |"
 tela4Linha28 : string "|                                      |"
 tela4Linha29 : string "|                                      |"
-
-tela5Linha0  : string "                                        "
-tela5Linha1  : string "                                        "
-tela5Linha2  : string "                                        "
-tela5Linha3  : string "                                        "
-tela5Linha4  : string "                                        "
-tela5Linha5  : string "                                        "
-tela5Linha6  : string "           __ _____  __ ___             "
-tela5Linha7  : string "           \\ V / _ \\/ _/ -_)            "
-tela5Linha8  : string "            \\_/\\___/\\__\\___|            "
-tela5Linha9  : string "                       _                "
-tela5Linha10 : string "      _ __  ___ _ _ __| |___ _  _       "
-tela5Linha11 : string "     | '_ \\/ -_) '_/ _` / -_) || |      "
-tela5Linha12 : string "     | .__/\\___|_| \\__,_\\___|\\_,_|      "
-tela5Linha13 : string "     |_|                                "
-tela5Linha14 : string "                                        "
-tela5Linha15 : string "    _           _                       "
-tela5Linha16 : string "   | |_ ___  __| |__ _ ___  __ _ ___    "
-tela5Linha17 : string "   |  _/ _ \\/ _` / _` (_-< / _` (_-<    "
-tela5Linha18 : string "    \\__\\___/\\__,_\\__,_/__/ \\__,_/__/    "
-tela5Linha19 : string "               _    _                   "
-tela5Linha20 : string "          __ _(_)__| |__ _ ___          "
-tela5Linha21 : string "          \\ V / / _` / _` (_-<          "
-tela5Linha22 : string "           \\_/|_\\__,_\\__,_/__/          "
-tela5Linha23 : string "                                        "
-tela5Linha24 : string "                                        "
-tela5Linha25 : string "                                        "
-tela5Linha26 : string "                                        "
-tela5Linha27 : string "                                        "
-tela5Linha28 : string "                                        "
-tela5Linha29 : string "                                        "

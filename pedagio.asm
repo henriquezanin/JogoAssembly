@@ -6,8 +6,7 @@ nVidasBixo: var #1		; Contem a quantidade de vidas restantes do bixo
 nPontos: var #1				; Contem a quantidade de pontos
 posBixo: var #1
 posCarro: var #1		; Contem a posicao atual do Alien
-posMoeda: var #1
-flagMoeda: var #1
+;posAntCarro: var #1		; Contem a posicao anterior do Alien
 
 init:
 	loadn R1, #3
@@ -52,11 +51,8 @@ main:
 		loadn r0, #900
 		store posBixo, r0
 		
-		loadn r0, #319
+		loadn r0, #320
 		store posCarro, r0
-		
-		loadn r0, #0
-		store flagMoeda, r0
 		
 		loadn r0, #0 ;Contador para divisoes
 		loadn r2, #0 ;Utilizado para operacao == 0 dos modulos
@@ -73,22 +69,13 @@ main:
 		cmp r1, r2		; if (mod(c/30) == 0
 		ceq MoveCarroDireita
 		
-		loadn r1, #19
-		mod r1, r0, r1
-		cmp r1, r2
-		ceq DropaMoeda
-		
-		;alterar condicao de colisao do bixo com a moeda pra acertar mesmo apos desenhada
-		;alterar formato do contador pra receber numeros maiores que 9
-		;alterar script da moeda pra redesenhar cenario por onde passa
+		;loadn R1, #2
+		;mod R1, R0, R1
+		;cmp R1, R2		; if (mod(c/2)==0
+		;Rotina moeda
 		
 		call Delay
 		inc r0 	;c++
-		
-		loadn r1, #0
-		load r3, nVidasBixo
-		cmp r1, r3
-		jeq FimDeJogo
 		
 		jmp MoveLoop
 		
@@ -248,8 +235,13 @@ MoveBixo:
 	cmp r1, r2
 	jeq MoveBixo_S
 	
+	MoveBixo_Fim:
+		pop r2
+		pop r1
+		pop r0
+		rts
 	
-	MoveBixo_A:
+	MoveBixo_A: 
 		loadn r1, #40
 		loadn r2, #0
 		mod r1, r0, r1
@@ -257,6 +249,8 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		dec R0
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	
@@ -268,6 +262,8 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		inc R0
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 	
 	MoveBixo_W:
@@ -277,22 +273,26 @@ MoveBixo:
 		jle MoveBixo_Fim
 		call MoveBixo_Apaga
 		sub r0, r0, r2
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_S:
-		loadn r1, #920
+		loadn r1, #919
 		cmp r0, r1
 		jgr MoveBixo_Fim
 		call MoveBixo_Apaga
 		loadn r2, #40
 		add r0, r0, r2
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_Desenha:
 		push r0
 		push r1
 		
-		loadn R1, #'X'	; Bixo
+		loadn R1, #'%'	; Bixo
 		load R0, posBixo
 		outchar R1, R0
 	
@@ -311,13 +311,80 @@ MoveBixo:
 		pop R1
 		pop R0
 		rts
-		
-	MoveBixo_Fim:
-		store posBixo, r0
+
+
+;********************************************************
+;                MOVE CARRO PRA DIREITA
+;********************************************************		
+MoveCarroDireita:
+	push r0
+	push r1
+	push r2
+	
+	load r0, posCarro ;pos na tela
+	loadn r1, #360 ;pos final na tela
+	loadn r2, #' '
+	
+	outchar r2, r0
+	inc r0
+	store posCarro, r0
+	cmp r0, r1
+	jle MoveCarroDireita_Desenha
+	jmp MoveCarroDireita_Volta
+	
+	MoveCarroDireita_Fim:
 		pop r2
 		pop r1
 		pop r0
 		rts
+
+	MoveCarroDireita_Desenha:
+		push r0
+		push r1
+		push r2
+
+		load r0, posCarro ;cor
+		loadn r1, #1024
+		loadn r2, #'#'
+		
+		add r2, r1, r2
+		
+		outchar r2, r0
+		pop r2
+		pop r1
+		pop r0
+		jmp MoveCarroDireita_Fim
+		
+		
+		
+	MoveCarroDireita_Volta:
+		push r0
+		
+		loadn r0, #320
+		store posCarro, r0
+		
+		pop r0
+		jmp MoveCarroDireita_Fim
+
+;DelayCarro:
+						;Utiliza Push e Pop para nao afetar os Ristradores do programa principal
+;	push r0
+;	push r1
+;	
+;	loadn r1, #140  ; a
+;  Delay_volta4:				;Quebrou o contador acima em duas partes (dois loops de decremento)
+;	loadn r0, #3000	; b
+;   Delay_volta3: 
+;	dec r0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
+;	jnz Delay_volta3	
+;	dec r1
+;	jnz Delay_volta4
+;	
+;	pop r1
+;	pop r0
+;	
+;	rts	
+	
 		
 ;********************************************************
 ;                       DELAY
@@ -329,7 +396,7 @@ Delay:
 	Push R0
 	Push R1
 	
-	Loadn R1, #10  ; a
+	Loadn R1, #12; a
    Delay_volta2:				;Quebrou o contador acima em duas partes (dois loops de decremento)
 	Loadn R0, #5000	; b
    Delay_volta: 

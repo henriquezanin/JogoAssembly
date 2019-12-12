@@ -6,7 +6,8 @@ nVidasBixo: var #1		; Contem a quantidade de vidas restantes do bixo
 nPontos: var #1				; Contem a quantidade de pontos
 posBixo: var #1
 posCarro: var #1		; Contem a posicao atual do Alien
-;posAntCarro: var #1		; Contem a posicao anterior do Alien
+posMoeda: var #1
+flagMoeda: var #1
 
 init:
 	loadn R1, #3
@@ -54,6 +55,9 @@ main:
 		loadn r0, #320
 		store posCarro, r0
 		
+		loadn r0, #0
+		store flagMoeda, r0
+		
 		loadn r0, #0 ;Contador para divisoes
 		loadn r2, #0 ;Utilizado para operacao == 0 dos modulos
 	
@@ -69,10 +73,14 @@ main:
 		cmp r1, r2		; if (mod(c/30) == 0
 		ceq MoveCarroDireita
 		
-		;loadn R1, #2
-		;mod R1, R0, R1
-		;cmp R1, R2		; if (mod(c/2)==0
-		;Rotina moeda
+		loadn r1, #5
+		mod r1, r0, r1
+		cmp r1, r2
+		ceq DropaMoeda
+		
+		;alterar condicao de colisao do bixo com a moeda pra acertar mesmo apos desenhada
+		;alterar formato do contador pra receber numeros maiores que 9
+		;alterar script da moeda pra redesenhar cenario por onde passa
 		
 		call Delay
 		inc r0 	;c++
@@ -366,26 +374,88 @@ MoveCarroDireita:
 		pop r0
 		jmp MoveCarroDireita_Fim
 
-;DelayCarro:
-						;Utiliza Push e Pop para nao afetar os Ristradores do programa principal
-;	push r0
-;	push r1
-;	
-;	loadn r1, #140  ; a
-;  Delay_volta4:				;Quebrou o contador acima em duas partes (dois loops de decremento)
-;	loadn r0, #3000	; b
-;   Delay_volta3: 
-;	dec r0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
-;	jnz Delay_volta3	
-;	dec r1
-;	jnz Delay_volta4
-;	
-;	pop r1
-;	pop r0
-;	
-;	rts	
+
+DropaMoeda:
+	push r0
+	push r1
+	push r2
 	
+	loadn r0, #0
+	load r1, flagMoeda
+	cmp r0, r1
+	ceq DropaMoeda_NovoTiro
+	
+	load r0, posMoeda
+	loadn r1, #40
+	loadn r2, #' '
+	
+	outchar r2, r0
+	add r0, r1, r0
+	store posMoeda, r0
+	load r2, posBixo
+	
+	cmp r0, r2
+	jeq ContadorPontos
+	
+	loadn r1, #919
+	cmp r0, r1
+	jle DropaMoeda_DesenhaMoeda
+	loadn r1, #0
+	store flagMoeda, r1
+	
+	
+	DropaMoeda_Fim:
+		pop r2
+		pop r1
+		pop r0
+		rts
+	
+	DropaMoeda_NovoTiro:
+		push r0
+		push r1
 		
+		load r0, posCarro
+		loadn r1, #40
+		add r0, r1, r0
+		
+		store posMoeda, r0
+		
+		loadn r1, #1
+		store flagMoeda, r1
+		
+		pop r1
+		pop r0
+		rts
+	
+	DropaMoeda_DesenhaMoeda:
+		push r0
+		push r1
+		
+		load r0, posMoeda
+		loadn r1, #'&'
+		
+		outchar r1, r0
+		
+		pop r1
+		pop r0
+		jmp DropaMoeda_Fim
+		
+ContadorPontos:
+	push r0
+	push r1
+	
+	load r0, nPontos
+	inc r0
+	store nPontos, r0
+	call ImprimeUI
+	
+	loadn r1, #0
+	store flagMoeda, r1
+	
+	pop r1
+	pop r0
+	jmp DropaMoeda_Fim
+	
 ;********************************************************
 ;                       DELAY
 ;********************************************************		

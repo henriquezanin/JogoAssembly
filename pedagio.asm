@@ -35,16 +35,16 @@ main:
 		
 	Cenario:
 		call ApagaTela
-		loadn R1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
-		loadn R2, #1536  			; cor branca!
+		loadn r1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn r2, #1536  			; cor branca!
 		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
     
-		loadn R1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
-		loadn R2, #2816  			; cor branca!
+		loadn r1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn r2, #2816  			; cor branca!
 		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
     
-		loadn R1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
-		loadn R2, #0   			; cor branca!
+		loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+		loadn r2, #0   			; cor branca!
 		call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
 		
 		call ImprimeUI
@@ -84,6 +84,11 @@ main:
 		
 		call Delay
 		inc r0 	;c++
+		
+		loadn r1, #0
+		load r3, nVidasBixo
+		cmp r1, r3
+		jeq FimDeJogo
 		
 		jmp MoveLoop
 		
@@ -445,6 +450,8 @@ DropaMoeda:
 		
 		load r0, posMoeda
 		loadn r1, #'&'
+		loadn r2, #2816
+		add r1, r2, r1 ;para imprimir amarelo
 		
 		outchar r1, r0
 		
@@ -496,7 +503,38 @@ ContadorVidas:
 	pop r1
 	pop r0
 	jmp DropaMoeda_Fim
+
+FimDeJogo:
+	push r0
+	push r1
 	
+	load r0, nVidasBixo
+	loadn r1, #0
+	ceq ImprimeFimDeJogo
+	
+	halt
+	
+ImprimeFimDeJogo:
+	call ApagaTela
+
+    loadn r1, #tela3Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #2816  			; cor branca!
+	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+    
+    loadn r1, #tela2Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #1536  			; cor branca!
+	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+	
+	loadn r1, #tela4Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #0   			; cor branca!
+	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+	
+	loadn r1, #tela5Linha0	; Endereco onde comeca a primeira linha do cenario!!
+	loadn r2, #2304   			; cor vermelha!
+	call ImprimeTela2   		;  Rotina de Impresao de Cenario na Tela Inteira
+		
+	call ImprimeUI
+
 ;********************************************************
 ;                       DELAY
 ;********************************************************		
@@ -783,3 +821,34 @@ tela4Linha26 : string "|                                      |"
 tela4Linha27 : string "|                                      |"
 tela4Linha28 : string "|                                      |"
 tela4Linha29 : string "|                                      |"
+
+tela5Linha0  : string "                                        "
+tela5Linha1  : string "                                        "
+tela5Linha2  : string "                                        "
+tela5Linha3  : string "                                        "
+tela5Linha4  : string "                                        "
+tela5Linha5  : string "                                        "
+tela5Linha6  : string "                                        "
+tela5Linha7  : string "                                        "
+tela5Linha8  : string "                                        "
+tela5Linha9  : string "                                        "
+tela5Linha10 : string "                                        "
+tela5Linha11 : string "                                        "
+tela5Linha12 : string "                                        "
+tela5Linha13 : string "                                        "
+tela5Linha14 : string "           sua vida chegou a 0          "
+tela5Linha15 : string "               voce perdeu              "
+tela5Linha16 : string "                                        "
+tela5Linha17 : string "                                        "
+tela5Linha18 : string "                                        "
+tela5Linha19 : string "                                        "
+tela5Linha20 : string "                                        "
+tela5Linha21 : string "                                        "
+tela5Linha22 : string "                                        "
+tela5Linha23 : string "                                        "
+tela5Linha24 : string "                                        "
+tela5Linha25 : string "                                        "
+tela5Linha26 : string "                                        "
+tela5Linha27 : string "                                        "
+tela5Linha28 : string "                                        "
+tela5Linha29 : string "                                        "

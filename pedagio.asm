@@ -5,6 +5,9 @@ Pontos: var #1
 nVidasBixo: var #1		; Contem a quantidade de vidas restantes do bixo
 nPontos: var #1				; Contem a quantidade de pontos
 posBixo: var #1
+posCarro: var #1		; Contem a posicao atual do Alien
+posMoeda: var #1
+flagMoeda: var #1
 
 init:
 	loadn R1, #3
@@ -49,17 +52,41 @@ main:
 		loadn r0, #900
 		store posBixo, r0
 		
-		call MoveCarroDireita
+		loadn r0, #319
+		store posCarro, r0
 		
-	MoveLoop:
-		call MoveBixo
-		call Delay
-		call MoveBixo_Desenha
-		;call MoveBixo_Apaga
-		jmp MoveLoop
-		breakp
+		loadn r0, #0
+		store flagMoeda, r0
 		
+		loadn r0, #0 ;Contador para divisoes
+		loadn r2, #0 ;Utilizado para operacao == 0 dos modulos
 	
+	MoveLoop:
+		
+		loadn r1, #5
+		mod r1, r0, r1
+		cmp r1, r2		; if (mod(c/10)==0
+		ceq MoveBixo
+		
+		loadn r1, #8
+		mod r1, r0, r1
+		cmp r1, r2		; if (mod(c/30) == 0
+		ceq MoveCarroDireita
+		
+		loadn r1, #19
+		mod r1, r0, r1
+		cmp r1, r2
+		ceq DropaMoeda
+		
+		;alterar condicao de colisao do bixo com a moeda pra acertar mesmo apos desenhada
+		;alterar formato do contador pra receber numeros maiores que 9
+		;alterar script da moeda pra redesenhar cenario por onde passa
+		
+		call Delay
+		inc r0 	;c++
+		
+		jmp MoveLoop
+		
 exit_game:
 	
 	halt
@@ -91,21 +118,102 @@ ImprimeUI:
 	push r0	; protege o r3 na pilha para ser usado na subrotina
 	push r1	; protege o r1 na pilha para preservar seu valor
 	push r2	; protege o r1 na pilha para preservar seu valor
+	push r3
 	
-	load R0, nVidasBixo
-	load R2, nPontos
-	loadn R1, #48
-	add R0, R0, R1
-	add R2, R2, R1
-	loadn R1, #47
-	outchar R0, R1 ; imprime o numero de vidas
-	loadn R1, #75
-	outchar R2, R1 ; imprime a fase
+	load r0, nVidasBixo
+	load r2, nPontos
 	
-	pop r2
-	pop r1
-	pop r0
-	rts
+	loadn r1, #48
+	add r0, r0, r1
+	loadn r1, #47
+	outchar r0, r1 ; imprime o numero de vidas
+	
+	;Se os pontos > 100 && < 1000
+	loadn r1, #100
+	div r3, r2, r1
+	loadn r1, #0
+	cmp r3, r1
+	jgr Points1000
+	
+	;Se os pontos > 10 && < 100
+	loadn r1, #10
+	div r3, r2, r1
+	loadn r1, #0
+	cmp r3, r1
+	jgr Points100
+	
+	;Se os potos > 0 && < 10
+	loadn r1, #10
+	div r3, r2, r1
+	loadn r1, #0
+	cmp r3, r1
+	jeq Points10
+	
+	jmp ImprimeUI_END
+	
+	Points10:
+		loadn R1, #48
+		add R2, R2, R1
+		loadn R1, #75
+		outchar R2, R1 ; imprime os pontos
+		jmp ImprimeUI_END
+		
+	Points100:
+		
+		;10^1
+		loadn r1, #10
+		load r2, nPontos
+		div r3, r2, r1
+		loadn R1, #48
+		add R2, R3, R1
+		loadn R1, #75
+		outchar R2, R1 ; imprime os pontos
+		
+		;10^0
+		loadn r1, #10
+		load r2, nPontos
+		mod r3, r2, r1
+		loadn R1, #48
+		add R2, R3, R1
+		loadn R1, #76
+		outchar R2, R1 ; imprime os pontos
+		jmp ImprimeUI_END
+		
+	Points1000:
+		;10^2
+		loadn r1, #100
+		load r2, nPontos
+		div r3, r2, r1
+		loadn R1, #48
+		add R2, R3, R1
+		loadn R1, #75
+		outchar R2, R1 ; imprime os pontos
+		
+		;10^1
+		loadn r1, #100
+		load r2, nPontos
+		mod r3, r2, r1
+		loadn R1, #48
+		add R2, R3, R1
+		loadn R1, #75
+		outchar R2, R1 ; imprime os pontos
+		
+		;10^0
+		loadn r1, #10
+		load r2, nPontos
+		mod r3, r2, r1
+		loadn R1, #48
+		add R2, R3, R1
+		loadn R1, #76
+		outchar R2, R1 ; imprime os pontos
+		jmp ImprimeUI_END
+	
+	ImprimeUI_END:
+		pop r3
+		pop r2
+		pop r1
+		pop r0
+		rts
 	
 ;********************************************************
 ;                    MOVE BIXO
@@ -117,9 +225,8 @@ MoveBixo:
 	
 	load r0, posBixo
 	
-	call DigLetra
-	load r1, Letra
-	
+	loadn r1, #0
+	inchar r1			; Le o teclado, se nada for digitado = 255
 	loadn r2, #'a'
 	cmp r1, r2
 	jeq MoveBixo_A
@@ -136,8 +243,13 @@ MoveBixo:
 	cmp r1, r2
 	jeq MoveBixo_S
 	
+	MoveBixo_Fim:
+		pop r2
+		pop r1
+		pop r0
+		rts
 	
-	MoveBixo_A:
+	MoveBixo_A: 
 		loadn r1, #40
 		loadn r2, #0
 		mod r1, r0, r1
@@ -145,6 +257,8 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		dec R0
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	
@@ -156,6 +270,8 @@ MoveBixo:
 		jeq MoveBixo_Fim
 		call MoveBixo_Apaga
 		inc R0
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 	
 	MoveBixo_W:
@@ -165,15 +281,19 @@ MoveBixo:
 		jle MoveBixo_Fim
 		call MoveBixo_Apaga
 		sub r0, r0, r2
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_S:
-		loadn r1, #920
+		loadn r1, #919
 		cmp r0, r1
 		jgr MoveBixo_Fim
 		call MoveBixo_Apaga
 		loadn r2, #40
 		add r0, r0, r2
+		store posBixo, r0
+		call MoveBixo_Desenha
 		jmp MoveBixo_Fim
 		
 	MoveBixo_Desenha:
@@ -199,13 +319,7 @@ MoveBixo:
 		pop R1
 		pop R0
 		rts
-		
-	MoveBixo_Fim:
-		store posBixo, r0
-		pop r2
-		pop r1
-		pop r0
-		rts
+
 
 ;********************************************************
 ;                MOVE CARRO PRA DIREITA
@@ -214,56 +328,175 @@ MoveCarroDireita:
 	push r0
 	push r1
 	push r2
-	push r3
-	push r4
 	
-	loadn r0, #320 ;pos inicial na tela
+	load r0, posCarro ;pos na tela
 	loadn r1, #360 ;pos final na tela
-	loadn r2, #1024 ;cor
-	loadn r3, #'#'
-	loadn r4, #' '
+	loadn r2, #' '
 	
-	add r3, r2, r3
+	outchar r2, r0
+	inc r0
+	store posCarro, r0
+	cmp r0, r1
+	jle MoveCarroDireita_Desenha
+	jmp MoveCarroDireita_Volta
 	
-	call ImprimeCarroDireita
-	
-	ImprimeCarroDireita:
-		outchar r3, r0
-		call DelayCarro
-		outchar r4, r0
-		inc r0
-		cmp r0, r1
-		jle ImprimeCarroDireita
+	MoveCarroDireita_Fim:
+		pop r2
+		pop r1
+		pop r0
 		rts
+
+	MoveCarroDireita_Desenha:
+		push r0
+		push r1
+		push r2
+
+		load r0, posCarro ;cor
+		loadn r1, #1024
+		loadn r2, #'#'
 		
-	pop r0
+		add r2, r1, r2
+		
+		outchar r2, r0
+		pop r2
+		pop r1
+		pop r0
+		jmp MoveCarroDireita_Fim
+		
+		
+		
+	MoveCarroDireita_Volta:
+		push r0
+		
+		loadn r0, #319
+		store posCarro, r0
+		
+		pop r0
+		jmp MoveCarroDireita_Fim
+
+
+DropaMoeda:
+	push r0
+	push r1
+	push r2
+	push r3
+	
+	loadn r0, #0
+	load r1, flagMoeda
+	cmp r0, r1
+	ceq DropaMoeda_NovoTiro
+	
+	load r0, posMoeda
+	loadn r2, #' '
+	outchar r2, r0
+	
+	loadn r1, #40
+	loadn r2, #14 ;Linha do tracejado
+	div r3, r0, r1
+	cmp r3, r2
+	ceq DropaMoeda_ReplaceChar
+	
+	add r0, r1, r0
+	store posMoeda, r0
+	
+	load r2, posBixo
+	cmp r0, r2
+	jeq ContadorPontos
+	
+	loadn r1, #960
+	cmp r0, r1
+	jle DropaMoeda_DesenhaMoeda
+	loadn r1, #0
+	store flagMoeda, r1
+	
+	loadn r1, #919
+	cmp r0, r0
+	jeg ContadorVidas
+	
+	
+	DropaMoeda_Fim:
+		pop r3
+		pop r2
+		pop r1
+		pop r0
+		rts
+	
+	DropaMoeda_NovoTiro:
+		push r0
+		push r1
+		
+		load r0, posCarro
+		loadn r1, #40
+		add r0, r1, r0
+		
+		store posMoeda, r0
+		
+		loadn r1, #1
+		store flagMoeda, r1
+		
+		pop r1
+		pop r0
+		rts
+	
+	DropaMoeda_DesenhaMoeda:
+		push r0
+		push r1
+		push r2
+		
+		load r0, posMoeda
+		loadn r1, #'&'
+		
+		outchar r1, r0
+		
+		pop r2
+		pop r1
+		pop r0
+		jmp DropaMoeda_Fim
+		
+	DropaMoeda_ReplaceChar:
+		push r0
+		push r1
+		
+		load r0, posMoeda
+		loadn r1, #'-'
+		outchar r1, r0
+
+		pop r1
+		pop r0
+		rts
+			
+ContadorPontos:
+	push r0
+	push r1
+	
+	load r0, nPontos
+	inc r0
+	store nPontos, r0
+	call ImprimeUI
+	
+	loadn r1, #0
+	store flagMoeda, r1
+	
 	pop r1
-	pop r2
-	pop r3
-	pop r4
-	rts
-
-
-DelayCarro:
-						;Utiliza Push e Pop para nao afetar os Ristradores do programa principal
-	push R0
-	push R1
+	pop r0
+	jmp DropaMoeda_Fim
 	
-	loadn R1, #140  ; a
-   Delay_volta4:				;Quebrou o contador acima em duas partes (dois loops de decremento)
-	loadn R0, #3000	; b
-   Delay_volta3: 
-	dec R0					; (4*a + 6)b = 1000000  == 1 seg  em um clock de 1MHz
-	jnz Delay_volta3	
-	dec R1
-	jnz Delay_volta4
+ContadorVidas:
+	push r0
+	push r1
 	
-	pop R1
-	pop R0
+	load r0, nVidasBixo
+	dec r0
+	store nVidasBixo, r0
+	call ImprimeUI
 	
-	rts	
+	loadn r1, #0
+	store flagMoeda, r1
 	
-		
+	pop r1
+	pop r0
+	jmp DropaMoeda_Fim
+	
 ;********************************************************
 ;                       DELAY
 ;********************************************************		

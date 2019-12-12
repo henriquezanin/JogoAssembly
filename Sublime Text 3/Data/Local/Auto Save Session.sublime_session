@@ -1,0 +1,560 @@
+{
+	"folder_history":
+	[
+	],
+	"last_version": 3065,
+	"last_window_id": 3,
+	"log_indexing": false,
+	"settings":
+	{
+		"new_window_height": 480.0,
+		"new_window_settings":
+		{
+			"auto_complete":
+			{
+				"selected_items":
+				[
+					[
+						"digL",
+						"digLetra_Loop"
+					],
+					[
+						"inc",
+						"incloop"
+					]
+				]
+			},
+			"build_system": "Packages/Assembly ICMC/Assembly ICMC.sublime-build",
+			"command_palette":
+			{
+				"height": 81.0,
+				"selected_items":
+				[
+					[
+						"insta",
+						"Package Control: Install Package"
+					]
+				],
+				"width": 400.0
+			},
+			"console":
+			{
+				"height": 126.0,
+				"history":
+				[
+					"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+				]
+			},
+			"distraction_free":
+			{
+				"menu_visible": true,
+				"show_minimap": false,
+				"show_open_files": false,
+				"show_tabs": false,
+				"side_bar_visible": false,
+				"status_bar_visible": false
+			},
+			"file_history":
+			[
+				"/D/Simulador/Hello4.asm",
+				"/D/Teste Ambiente/Hello4.asm",
+				"/D/Teste Ambiente/leString.asm",
+				"/D/Teste Ambiente/forca.asm",
+				"/D/Teste Ambiente - Copia/Hello4.asm",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/Preferences.sublime-settings",
+				"/D/Teste Ambiente/printForca.asm",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/untitled.sublime-build",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.561/Assembly ICMC.sublime-build",
+				"/D/Documentos/USP/Prat_OrgC/Versao_05_2013/32_bits/Forca01.asm",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.040/Completion Rules.tmPreferences",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.959/C++.tmLanguage",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.091/C++.sublime-settings",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.196/C++.sublime-build",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.532/C.tmLanguage",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.207/Batch File.tmLanguage",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Cache/Assembly ICMC/Assembly_ICMC_Syntax.tmLanguage",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/Assembly ICMC.sublime-build",
+				"/D/Documentos/USP/Prat_OrgC/Aula_2015-03-04/Hello4.asm",
+				"/D/Teste Ambiente/Hello4.mif",
+				"/D/Teste Ambiente/Versao_05_2013/Exemplos/Hello4.asm"
+			],
+			"find":
+			{
+				"height": 30.0
+			},
+			"find_in_files":
+			{
+				"height": 0.0,
+				"where_history":
+				[
+				]
+			},
+			"find_state":
+			{
+				"case_sensitive": false,
+				"find_history":
+				[
+					"280",
+					"r*",
+					"r3",
+					"r2",
+					"r3"
+				],
+				"highlight": true,
+				"in_selection": false,
+				"preserve_case": false,
+				"regex": false,
+				"replace_history":
+				[
+				],
+				"reverse": false,
+				"show_context": true,
+				"use_buffer2": true,
+				"whole_word": false,
+				"wrap": true
+			},
+			"incremental_find":
+			{
+				"height": 30.0
+			},
+			"input":
+			{
+				"height": 0.0
+			},
+			"menu_visible": true,
+			"output.exec":
+			{
+				"height": 179.0
+			},
+			"output.find_results":
+			{
+				"height": 0.0
+			},
+			"replace":
+			{
+				"height": 56.0
+			},
+			"save_all_on_build": true,
+			"select_file":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"select_project":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"select_symbol":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"show_minimap": true,
+			"show_open_files": false,
+			"show_tabs": true,
+			"side_bar_visible": true,
+			"side_bar_width": 150.0,
+			"status_bar_visible": true,
+			"template_settings":
+			{
+			}
+		},
+		"new_window_width": 640.0
+	},
+	"windows":
+	[
+		{
+			"auto_complete":
+			{
+				"selected_items":
+				[
+					[
+						"load",
+						"loadn	abc"
+					],
+					[
+						"store",
+						"storei	Store Index | mem[rx] = ry"
+					],
+					[
+						"posAnt",
+						"posAntMoeda	abc"
+					],
+					[
+						"movecaa",
+						"MoveCarroDireita_fim"
+					],
+					[
+						"Moveca",
+						"MoveCarroDireita_fim	abc"
+					],
+					[
+						"posca",
+						"posCarro	abc"
+					],
+					[
+						"move",
+						"MoveBixo_Desenha"
+					],
+					[
+						"MoveBixo_",
+						"MoveBixo_Desenha	abc"
+					],
+					[
+						"Movebi",
+						"MoveBixo_Desenha	abc"
+					],
+					[
+						"Move",
+						"MoveBixo	abc"
+					],
+					[
+						"digL",
+						"digLetra_Loop"
+					],
+					[
+						"inc",
+						"incloop"
+					]
+				]
+			},
+			"buffers":
+			[
+				{
+					"file": "/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/SSC0511-Organizacao-de-Computadores-Digitais_Nave11.asm",
+					"settings":
+					{
+						"buffer_size": 32632,
+						"line_ending": "Windows"
+					}
+				},
+				{
+					"file": "/C/Users/Mihcchan/Documents/GitHub/JogoAssembly/pedagio.asm",
+					"settings":
+					{
+						"buffer_size": 20817,
+						"line_ending": "Windows"
+					}
+				},
+				{
+					"file": "/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/pedagio.asm",
+					"settings":
+					{
+						"buffer_size": 20818,
+						"line_ending": "Windows"
+					}
+				}
+			],
+			"build_system": "Packages/Assembly ICMC/Assembly ICMC.sublime-build",
+			"command_palette":
+			{
+				"height": 81.0,
+				"selected_items":
+				[
+					[
+						"insta",
+						"Package Control: Install Package"
+					]
+				],
+				"width": 400.0
+			},
+			"console":
+			{
+				"height": 126.0,
+				"history":
+				[
+					"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+				]
+			},
+			"distraction_free":
+			{
+				"menu_visible": true,
+				"show_minimap": false,
+				"show_open_files": false,
+				"show_tabs": false,
+				"side_bar_visible": false,
+				"status_bar_visible": false
+			},
+			"file_history":
+			[
+				"/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/andando.asm",
+				"/C/Users/Mihcchan/Documents/GitHub/JogoAssembly/pedagio.asm",
+				"/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/charmap.mif",
+				"/C/Users/Mihcchan/Documents/GitHub/JogoAssembly/pedagio.mif",
+				"/C/Users/Mihcchan/Documents/GitHub/JogoAssembly/charmap.mif",
+				"/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/pedagio.asm",
+				"/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/pedagio1.asm",
+				"/C/Users/Mihcchan/AppData/Local/Temp/Temp1_JogoAssembly-mihcchan-patch-1.zip/JogoAssembly-mihcchan-patch-1/pedagio.asm",
+				"/C/Users/Mihcchan/Desktop/Simulador/charmap.mif",
+				"/C/Users/Mihcchan/Desktop/Simulador/Hello4.asm",
+				"/C/Users/Mihcchan/Desktop/Simulador/pedagio.asm",
+				"/D/Simulador/Hello4.asm",
+				"/D/Teste Ambiente/Hello4.asm",
+				"/D/Teste Ambiente/leString.asm",
+				"/D/Teste Ambiente/forca.asm",
+				"/D/Teste Ambiente - Copia/Hello4.asm",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/Preferences.sublime-settings",
+				"/D/Teste Ambiente/printForca.asm",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/untitled.sublime-build",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.561/Assembly ICMC.sublime-build",
+				"/D/Documentos/USP/Prat_OrgC/Versao_05_2013/32_bits/Forca01.asm",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.040/Completion Rules.tmPreferences",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.959/C++.tmLanguage",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.091/C++.sublime-settings",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.196/C++.sublime-build",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.532/C.tmLanguage",
+				"/C/Users/CARLOS~1/AppData/Local/Temp/Rar$DRa0.207/Batch File.tmLanguage",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Cache/Assembly ICMC/Assembly_ICMC_Syntax.tmLanguage",
+				"/D/Teste Ambiente/Sublime Text 3/Data/Packages/User/Assembly ICMC.sublime-build",
+				"/D/Documentos/USP/Prat_OrgC/Aula_2015-03-04/Hello4.asm",
+				"/D/Teste Ambiente/Hello4.mif",
+				"/D/Teste Ambiente/Versao_05_2013/Exemplos/Hello4.asm"
+			],
+			"find":
+			{
+				"height": 35.0
+			},
+			"find_in_files":
+			{
+				"height": 0.0,
+				"where_history":
+				[
+				]
+			},
+			"find_state":
+			{
+				"case_sensitive": false,
+				"find_history":
+				[
+					"delay",
+					"del",
+					"delay",
+					"ceq",
+					"movealien_recalculapos",
+					"delay",
+					"dela",
+					"		\n",
+					"imprimestr",
+					"imprime",
+					"move",
+					"digi",
+					"imprimeui",
+					"Loop_Inicio",
+					"280",
+					"r*",
+					"r3",
+					"r2",
+					"r3"
+				],
+				"highlight": true,
+				"in_selection": false,
+				"preserve_case": false,
+				"regex": false,
+				"replace_history":
+				[
+				],
+				"reverse": false,
+				"show_context": true,
+				"use_buffer2": true,
+				"whole_word": false,
+				"wrap": true
+			},
+			"groups":
+			[
+				{
+					"selected": 2,
+					"sheets":
+					[
+						{
+							"buffer": 0,
+							"file": "/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/SSC0511-Organizacao-de-Computadores-Digitais_Nave11.asm",
+							"semi_transient": false,
+							"settings":
+							{
+								"buffer_size": 32632,
+								"regions":
+								{
+								},
+								"selection":
+								[
+									[
+										15091,
+										11973
+									]
+								],
+								"settings":
+								{
+									"syntax": "Packages/Assembly ICMC/Assembly ICMC.tmLanguage",
+									"translate_tabs_to_spaces": false
+								},
+								"translation.x": 0.0,
+								"translation.y": 767.0,
+								"zoom_level": 1.0
+							},
+							"stack_index": 2,
+							"type": "text"
+						},
+						{
+							"buffer": 1,
+							"file": "/C/Users/Mihcchan/Documents/GitHub/JogoAssembly/pedagio.asm",
+							"semi_transient": false,
+							"settings":
+							{
+								"buffer_size": 20817,
+								"regions":
+								{
+								},
+								"selection":
+								[
+									[
+										0,
+										0
+									]
+								],
+								"settings":
+								{
+									"syntax": "Packages/Assembly ICMC/Assembly ICMC.tmLanguage",
+									"translate_tabs_to_spaces": false
+								},
+								"translation.x": 8.0,
+								"translation.y": 0.0,
+								"zoom_level": 1.0
+							},
+							"stack_index": 1,
+							"type": "text"
+						},
+						{
+							"buffer": 2,
+							"file": "/C/Users/Mihcchan/Documents/Graduação/OrgComp/Simulador/pedagio.asm",
+							"semi_transient": false,
+							"settings":
+							{
+								"buffer_size": 20818,
+								"regions":
+								{
+								},
+								"selection":
+								[
+									[
+										1838,
+										1838
+									]
+								],
+								"settings":
+								{
+									"syntax": "Packages/Assembly ICMC/Assembly ICMC.tmLanguage"
+								},
+								"translation.x": -0.0,
+								"translation.y": 1134.0,
+								"zoom_level": 1.0
+							},
+							"stack_index": 0,
+							"type": "text"
+						}
+					]
+				}
+			],
+			"incremental_find":
+			{
+				"height": 27.0
+			},
+			"input":
+			{
+				"height": 0.0
+			},
+			"layout":
+			{
+				"cells":
+				[
+					[
+						0,
+						0,
+						1,
+						1
+					]
+				],
+				"cols":
+				[
+					0.0,
+					1.0
+				],
+				"rows":
+				[
+					0.0,
+					1.0
+				]
+			},
+			"menu_visible": true,
+			"output.exec":
+			{
+				"height": 241.0
+			},
+			"output.find_results":
+			{
+				"height": 0.0
+			},
+			"position": "0,2,3,-1,-1,-1,-1,628,233,89,889",
+			"project": "",
+			"replace":
+			{
+				"height": 50.0
+			},
+			"save_all_on_build": true,
+			"select_file":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"select_project":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"select_symbol":
+			{
+				"height": 0.0,
+				"selected_items":
+				[
+				],
+				"width": 0.0
+			},
+			"selected_group": 0,
+			"settings":
+			{
+			},
+			"show_minimap": true,
+			"show_open_files": false,
+			"show_tabs": true,
+			"side_bar_visible": true,
+			"side_bar_width": 150.0,
+			"status_bar_visible": true,
+			"template_settings":
+			{
+			},
+			"window_id": 1,
+			"workspace_name": ""
+		}
+	],
+	"workspaces":
+	{
+		"recent_workspaces":
+		[
+		]
+	}
+}

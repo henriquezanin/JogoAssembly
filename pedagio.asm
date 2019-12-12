@@ -52,7 +52,7 @@ main:
 		loadn r0, #900
 		store posBixo, r0
 		
-		loadn r0, #320
+		loadn r0, #319
 		store posCarro, r0
 		
 		loadn r0, #0
@@ -73,7 +73,7 @@ main:
 		cmp r1, r2		; if (mod(c/30) == 0
 		ceq MoveCarroDireita
 		
-		loadn r1, #20
+		loadn r1, #19
 		mod r1, r0, r1
 		cmp r1, r2
 		ceq DropaMoeda
@@ -120,13 +120,13 @@ ImprimeUI:
 	push r2	; protege o r1 na pilha para preservar seu valor
 	push r3
 	
-	load R0, nVidasBixo
-	load R2, nPontos
+	load r0, nVidasBixo
+	load r2, nPontos
 	
-	loadn R1, #48
-	add R0, R0, R1
-	loadn R1, #47
-	outchar R0, R1 ; imprime o numero de vidas
+	loadn r1, #48
+	add r0, r0, r1
+	loadn r1, #47
+	outchar r0, r1 ; imprime o numero de vidas
 	
 	;Se os pontos > 100 && < 1000
 	loadn r1, #100
@@ -368,7 +368,7 @@ MoveCarroDireita:
 	MoveCarroDireita_Volta:
 		push r0
 		
-		loadn r0, #320
+		loadn r0, #319
 		store posCarro, r0
 		
 		pop r0
@@ -403,11 +403,15 @@ DropaMoeda:
 	cmp r0, r2
 	jeq ContadorPontos
 	
-	loadn r1, #919
+	loadn r1, #959
 	cmp r0, r1
-	jle DropaMoeda_DesenhaMoeda
+	jel DropaMoeda_DesenhaMoeda
 	loadn r1, #0
 	store flagMoeda, r1
+	
+	loadn r1, #919
+	cmp r0, r0
+	jeg ContadorVidas
 	
 	
 	DropaMoeda_Fim:
@@ -468,6 +472,22 @@ ContadorPontos:
 	load r0, nPontos
 	inc r0
 	store nPontos, r0
+	call ImprimeUI
+	
+	loadn r1, #0
+	store flagMoeda, r1
+	
+	pop r1
+	pop r0
+	jmp DropaMoeda_Fim
+	
+ContadorVidas:
+	push r0
+	push r1
+	
+	load r0, nVidasBixo
+	dec r0
+	store nVidasBixo, r0
 	call ImprimeUI
 	
 	loadn r1, #0
